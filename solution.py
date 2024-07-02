@@ -6,16 +6,18 @@ def main():
     # 1 represents 'X' and -1 represents 'O'
     # 0 represents an empty space
     testBoard = np.zeros((4,4))
-    addX(testBoard, (0,0))
-    # addX(testBoard, (0,1))
-    # addX(testBoard, (0,2))
+    addO(testBoard, (0,0))
+    addO(testBoard, (0,1))
+    addX(testBoard, (0,2))
     addX(testBoard, (0,3))
     addX(testBoard, (3,0))
+    addO(testBoard, (1,1))
+    addO(testBoard, (1,0))
     # addX(testBoard, (1,3))
     # addO(testBoard, (1,2))
     addX(testBoard, (3,3))
     # addO(testBoard, (1,1))
-    # addO(testBoard, (2,2))
+    addO(testBoard, (2,2))
     print("Test Board:\n", testBoard)
 
     checkWinner(testBoard)
@@ -45,33 +47,47 @@ def add(board, loc, val):
 # check if there is a winner
 # True if there is a winner
 # Needs to return who the winner is
+# Assumes board doesn't have more than one winning condition
 def checkWinner(board):
 
     # Verticals
     vert = np.sum(board, axis=0)
-    # assessCondition(vert)
-    
+    assessCondition(vert)
 
     # Horizontals
     hor = np.sum(board, axis=1)
-    # assessCondition(hor)
+    assessCondition(hor)
 
     # Diagonals
     diagOne = board.diagonal().sum()
     diagTwo = np.fliplr(board).diagonal().sum()
 
-    # assessCondition(diagOne)
-    # assessCondition(diagTwo)
+    assessCondition(diagOne)
+    assessCondition(diagTwo)
     
     # Corners
     # Hard code the indicies?
     cornerIndicies = [0, 3, 12, 15]
     corners = np.take(board, cornerIndicies).sum()
-    # assessCondition(corners)
+    assessCondition(corners)
 
     # 2x2's
+    # manual
 
-    return
+    anchorPoints = board[:-1,:-1]
+    iterator = np.nditer(anchorPoints, flags=['multi_index'])
+    for x in iterator:
+        i,j = iterator.multi_index
+        sample = board[i:i+2, j:j+2]
+        # print(sample)
+        # print(sample.sum())
+        assessCondition(sample.sum())    
+        
+
+    # TODO: end check if winner is found, else keep going
+    # also get better way of outputting who won
+
+    return False
 
 # checks if a player meets a condition
 # patterns is a list of integers
