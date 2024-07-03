@@ -6,7 +6,7 @@ def main():
     # 1 represents 'X' and -1 represents 'O'
     # 0 represents an empty space
     
-    board = testBoards.horizontalWin(1)
+    board = testBoards.emptyBoard()
     print("Test Board:\n", board)
 
     isGameOver(board)
@@ -31,13 +31,10 @@ def checkWinner(board):
         return True
     
     # Corners
-    # Hard code the indicies?
-    cornerIndicies = [0, 3, 12, 15]
-    if checkWinnerHelper(np.take(board, cornerIndicies).sum()):
+    if checkWinnerHelper(board[::board.shape[0]-1, ::board.shape[1]-1].sum()):
         return True
 
     # 2x2's
-    # manual
     anchorPoints = board[:-1, :-1]
     iterator = np.nditer(anchorPoints, flags=['multi_index'])
     for x in iterator:
@@ -80,9 +77,9 @@ def isGameOver(board):
     if checkWinner(board) or anyMovesLeft(board):
         print("Game Over")
         return True
-    else:
-        print("Continue")
-        return False
+
+    print("Continue")
+    return False
 
 if __name__ == "__main__":
     main()
